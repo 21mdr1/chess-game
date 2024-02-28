@@ -1,3 +1,4 @@
+import Piece from '../Piece/Piece';
 import './Square.scss';
 
 const mapping = {
@@ -17,7 +18,7 @@ function Square({ rank, file }: {
 }) {
     return (
         <div className={`square square--${rank} square--${file} square--${(Number(rank) + mapping[file]) % 2 == 0? 'dark' : 'light'}`}>
-            {file + rank}
+            <Piece type="rook" color="white" />
         </div>
     );
 }

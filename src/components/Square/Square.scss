@@ -1,4 +1,8 @@
 .square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     &--a {
         grid-column: 1;
     }

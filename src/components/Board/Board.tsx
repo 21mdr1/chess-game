@@ -9,7 +9,7 @@ function Board() {
         <div className='board'>
             {ranks.map(rank => {
                 return files.map(file => {
-                    return <Square file={file} rank={rank} />
+                    return <Square key={file + rank} file={file} rank={rank} />
                 });
             })}
         </div>
