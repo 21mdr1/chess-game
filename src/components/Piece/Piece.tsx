@@ -12,32 +12,36 @@ import blackQueen from '../../assets/default-chess-set/black-queen.png';
 import blackKing from '../../assets/default-chess-set/black-king.png';
 import './Piece.scss';
 
-function Piece({ type, color }: {
-    type?: "pawn" | "rook" | "knight" | "bishop" | "queen" | "king";
-    color?: "white" | "black";
+enum PieceColor { White, Black };
+enum PieceType { Pawn, Rook, Knight, Bishop, Queen, King };
+
+enum PieceRank { One = 1, Two, Three, Four, Five, Six, Seven, Eight };
+enum PieceFile { A = 'a', B = 'b', C = 'c', D = 'd', E = 'e', F = 'f', G = 'g', H = 'h' };
+
+function Piece({ type, color, rank, file }: {
+    type: PieceType;
+    color: PieceColor;
+    rank: PieceRank;
+    file: PieceFile;
 }) {
 
     const piece = {
-        "white pawn": whitePawn,
-        "white rook": whiteRook,
-        "white knight": whiteKnight,
-        "white bishop": whiteBishop,
-        "white queen": whiteQueen,
-        "white king": whiteKing,
-        "black pawn": blackPawn,
-        "black rook": blackRook,
-        "black knight": blackKnight,
-        "black bishop": blackBishop,
-        "black queen": blackQueen,
-        "black king": blackKing,
+        "0 0": whitePawn,
+        "0 1": whiteRook,
+        "0 2": whiteKnight,
+        "0 3": whiteBishop,
+        "0 4": whiteQueen,
+        "0 5": whiteKing,
+        "1 0": blackPawn,
+        "1 1": blackRook,
+        "1 2": blackKnight,
+        "1 3": blackBishop,
+        "1 4": blackQueen,
+        "1 5": blackKing,
     }
 
     return (
-        <>
-        { type && color && (
-            <img className="chess-piece" src={piece[`${color} ${type}`]} alt={`${color} ${type}`} />
-        )}
-        </>
+        <img className={`chess-piece location--${rank} location--${file}`} src={piece[`${color} ${type}`]} alt={`${color} ${type}`} />
     );
 }
 
