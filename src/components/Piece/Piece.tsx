@@ -18,11 +18,12 @@ enum PieceType { Pawn, Rook, Knight, Bishop, Queen, King };
 enum PieceRank { One = 1, Two, Three, Four, Five, Six, Seven, Eight };
 enum PieceFile { A = 'a', B = 'b', C = 'c', D = 'd', E = 'e', F = 'f', G = 'g', H = 'h' };
 
-function Piece({ type, color, rank, file }: {
+function Piece({ type, color, rank, file, select }: {
     type: PieceType;
     color: PieceColor;
     rank: PieceRank;
     file: PieceFile;
+    select (rank: PieceRank, file: PieceFile): void;
 }) {
 
     const piece = {
@@ -41,7 +42,12 @@ function Piece({ type, color, rank, file }: {
     }
 
     return (
-        <img className={`chess-piece location--${rank} location--${file}`} src={piece[`${color} ${type}`]} alt={`${color} ${type}`} />
+        <img 
+            onClick={ () => {select(rank, file)} }
+            className={`chess-piece location--${rank} location--${file}`} 
+            src={piece[`${color} ${type}`]} 
+            alt={`${color} ${type}`} 
+        />
     );
 }
 

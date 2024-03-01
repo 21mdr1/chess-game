@@ -1,5 +1,6 @@
 import Square from '../Square/Square';
 import Piece from '../Piece/Piece';
+import { useState } from 'react';
 import './Board.scss';
 
 function Board() {
@@ -249,17 +250,35 @@ function Board() {
         },
     ]
 
+    let [ selected, setSelected ] = useState("");
+
+    function select(rank: PieceRank, file: PieceFile): void {
+        setSelected( selected ? "" :  `${file}${rank}`)
+    }
+
 
     return (
         <div className='board'>
-            {ranks.map(rank => {
-                return files.map(file => {
-                    return <Square key={file + rank} file={file} rank={rank} />
-                });
-            })}
-            {pieces.map(({ color, type, rank, file }: iPiece) => {
-                return <Piece key={ `${file}${rank}` } color={ color } type={ type } rank={ rank } file={ file }/>
-            })}
+            {ranks.map(rank =>
+                files.map(file => 
+                    <Square 
+                        key={ file + rank } 
+                        file={ file } 
+                        rank={ rank }
+                        selected={ selected === `${file}${rank}` }
+                    />
+                )
+            )}
+            {pieces.map(({ color, type, rank, file }: iPiece) =>
+                <Piece 
+                    key={ `${file}${rank}` } 
+                    color={ color } 
+                    type={ type } 
+                    rank={ rank } 
+                    file={ file } 
+                    select={ select }
+                />
+            )}
         </div>
     );
 }
