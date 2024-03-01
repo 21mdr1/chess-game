@@ -121,6 +121,125 @@ function Board() {
         return possibilities;
     }
 
+    function knightPotentialMoves(this: iPiece): string[] {
+        let possibilities: string[] = [];
+
+        // TODO: check if squares are occupied
+        // TODO: deal with squares outside of the board
+
+        let currentFile: PieceFile | null;
+
+        switch (this.file) {
+            case A:
+                currentFile = B;
+                break;
+            case B:
+                currentFile = C;
+                break;
+            case C:
+                currentFile = D;
+                break;
+            case D:
+                currentFile = E;
+                break;
+            case E:
+                currentFile = F;
+                break;
+            case F:
+                currentFile = G;
+                break;
+            case G:
+                currentFile = H;
+                break;
+            default:
+                currentFile = null;
+        }
+        possibilities.push(`${currentFile}${this.rank + 2}`);
+        possibilities.push(`${currentFile}${this.rank - 2}`);
+
+        switch (this.file) {
+            case B:
+                currentFile = A;
+                break;
+            case C:
+                currentFile = B;
+                break;
+            case D:
+                currentFile = C;
+                break;
+            case E:
+                currentFile = D;
+                break;
+            case F:
+                currentFile = E;
+                break;
+            case G:
+                currentFile = F;
+                break;
+            case H:
+                currentFile = G;
+                break;
+            default:
+                currentFile = null;
+        }
+        possibilities.push(`${currentFile}${this.rank + 2}`);
+        possibilities.push(`${currentFile}${this.rank - 2}`);
+
+        switch (this.file) {
+            case A:
+                currentFile = C;
+                break;
+            case B:
+                currentFile = D;
+                break;
+            case C:
+                currentFile = E;
+                break;
+            case D:
+                currentFile = F;
+                break;
+            case E:
+                currentFile = G;
+                break;
+            case F:
+                currentFile = H;
+                break;
+            default:
+                currentFile = null;
+        }
+        possibilities.push(`${currentFile}${this.rank + 1}`);
+        possibilities.push(`${currentFile}${this.rank - 1}`);
+
+        switch (this.file) {
+            case C:
+                currentFile = A;
+                break;
+            case D:
+                currentFile = B;
+                break;
+            case E:
+                currentFile = C;
+                break;
+            case F:
+                currentFile = D;
+                break;
+            case G:
+                currentFile = E;
+                break;
+            case H:
+                currentFile = F;
+                break;
+            default:
+                currentFile = null;
+        }
+        possibilities.push(`${currentFile}${this.rank + 1}`);
+        possibilities.push(`${currentFile}${this.rank - 1}`);
+
+
+        return possibilities;
+    }
+
+
     function location(this: iPiece): string {
         return `${this.file}${this.rank}`
     }
@@ -214,7 +333,7 @@ function Board() {
             type: Knight,
             file: B,
             rank: One,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: knightPotentialMoves,
             getLocation: location,
         },
         {
@@ -254,7 +373,7 @@ function Board() {
             type: Knight,
             file: G,
             rank: One,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: knightPotentialMoves,
             getLocation: location,
         },
         {
@@ -342,7 +461,7 @@ function Board() {
             type: Knight,
             file: B,
             rank: Eight,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: knightPotentialMoves,
             getLocation: location,
         },
         {
@@ -382,7 +501,7 @@ function Board() {
             type: Knight,
             file: G,
             rank: Eight,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: knightPotentialMoves,
             getLocation: location,
         },
         {
