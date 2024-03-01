@@ -9,251 +9,316 @@ function Board() {
 
 
     enum PieceColor { White, Black };
+    const { White, Black } = PieceColor;
     enum PieceType { Pawn, Rook, Knight, Bishop, Queen, King };
+    const { Pawn, Rook, Knight, Bishop, Queen, King } = PieceType;
 
     enum PieceRank { One = 1, Two, Three, Four, Five, Six, Seven, Eight };
+    const { One, Two, Three, Four, Five, Six, Seven, Eight } = PieceRank;
     enum PieceFile { A = 'a', B = 'b', C = 'c', D = 'd', E = 'e', F = 'f', G = 'g', H = 'h' };
+    const { A, B, C, D, E, F, G, H } = PieceFile;
+
+    function pawnPotentialMoves(this: iPiece): string[] {
+        let possibilities: string[] = [];
+
+        // TODO: check if squares are occupied
+
+        if (this.color === White) {
+            possibilities.push(`${this.file}${this.rank + 1}`);
+
+            if (this.rank === Two) {
+                possibilities.push(`${this.file}${this.rank + 2}`);
+            }
+
+        } else if (this.color === Black) {
+            possibilities.push(`${this.file}${this.rank - 1}`);
+
+            if (this.rank === Seven) {
+                possibilities.push(`${this.file}${this.rank - 2}`);
+            }
+        }
+
+        return possibilities;
+    }
+
+    function location(this: iPiece): string {
+        return `${this.file}${this.rank}`
+    }
 
     interface iPiece {
         color: PieceColor;
         type: PieceType;
         rank: PieceRank;
         file: PieceFile;
-        move(): void;
-        capture?(): void;
+        getPotentialMoves(): string[];
+        getLocation(): string;
     }
 
     const pieces: iPiece[] = [
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.A,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: A,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.B,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: B,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.C,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: C,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.D,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: D,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.E,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: E,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.F,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: F,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.G,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: G,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Pawn,
-            rank: PieceRank.Two,
-            file: PieceFile.H,
-            move: () => {},
+            color: White,
+            type: Pawn,
+            file: H,
+            rank: Two,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.White,
-            type: PieceType.Rook,
-            rank: PieceRank.One,
-            file: PieceFile.A,
-            move: () => {},
+            color: White,
+            type: Rook,
+            file: A,
+            rank: One,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.White,
             type: PieceType.Knight,
             rank: PieceRank.One,
             file: PieceFile.B,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.White,
             type: PieceType.Bishop,
             rank: PieceRank.One,
             file: PieceFile.C,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.White,
             type: PieceType.Queen,
             rank: PieceRank.One,
             file: PieceFile.D,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.White,
             type: PieceType.King,
             rank: PieceRank.One,
             file: PieceFile.E,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.White,
             type: PieceType.Bishop,
             rank: PieceRank.One,
             file: PieceFile.F,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.White,
             type: PieceType.Knight,
             rank: PieceRank.One,
             file: PieceFile.G,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.White,
             type: PieceType.Rook,
             rank: PieceRank.One,
             file: PieceFile.H,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.A,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: A, 
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.B,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: B,
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.C,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: C,
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.D,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: D,
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.E,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: E,
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.F,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: F,
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.G,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: G,
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
-            color: PieceColor.Black,
-            type: PieceType.Pawn,
-            rank: PieceRank.Seven,
-            file: PieceFile.H,
-            move: () => {},
+            color: Black,
+            type: Pawn,
+            file: H,
+            rank: Seven,
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.Rook,
             rank: PieceRank.Eight,
             file: PieceFile.A,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.Knight,
             rank: PieceRank.Eight,
             file: PieceFile.B,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.Bishop,
             rank: PieceRank.Eight,
             file: PieceFile.C,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.Queen,
             rank: PieceRank.Eight,
             file: PieceFile.D,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.King,
             rank: PieceRank.Eight,
             file: PieceFile.E,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.Bishop,
             rank: PieceRank.Eight,
             file: PieceFile.F,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.Knight,
             rank: PieceRank.Eight,
             file: PieceFile.G,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
         {
             color: PieceColor.Black,
             type: PieceType.Rook,
             rank: PieceRank.Eight,
             file: PieceFile.H,
-            move: () => {},
+            getPotentialMoves: pawnPotentialMoves,
+            getLocation: location,
         },
     ]
 
-    let [ selected, setSelected ] = useState("");
+    let [ selected, setSelected ] = useState<iPiece | null>(null);
+    let [ potentialMoves, setPotentialMoves ] = useState<string[]>([]);
 
-    function select(rank: PieceRank, file: PieceFile): void {
-        setSelected( selected ? "" :  `${file}${rank}`)
+    function select(piece: iPiece): void {
+        setSelected( selected ? null :  piece);
+        setPotentialMoves( selected ? [] : piece.getPotentialMoves() );
     }
 
 
@@ -265,17 +330,15 @@ function Board() {
                         key={ file + rank } 
                         file={ file } 
                         rank={ rank }
-                        selected={ selected === `${file}${rank}` }
+                        selected={ selected !== null && selected.getLocation() === `${file}${rank}` }
+                        potentialMove={ potentialMoves.length !== 0 && potentialMoves.includes(`${file}${rank}`) }
                     />
                 )
             )}
-            {pieces.map(({ color, type, rank, file }: iPiece) =>
+            {pieces.map((piece: iPiece) =>
                 <Piece 
-                    key={ `${file}${rank}` } 
-                    color={ color } 
-                    type={ type } 
-                    rank={ rank } 
-                    file={ file } 
+                    key={ `${piece.file}${piece.rank}` } 
+                    piece={ piece }
                     select={ select }
                 />
             )}

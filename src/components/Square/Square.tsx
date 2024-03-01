@@ -11,13 +11,15 @@ const mapping = {
     'h': 8
 }
 
-function Square({ rank, file, selected }: {
+function Square({ rank, file, selected, potentialMove }: {
     rank: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
     file: 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
     selected: boolean;
+    potentialMove: boolean;
 }) {
 
     const color = selected ? "selected" : 
+        potentialMove ? "potential" :
         (Number(rank) + mapping[file]) % 2 == 0 ? 'dark' : 'light'
 
 
