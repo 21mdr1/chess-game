@@ -41,6 +41,86 @@ function Board() {
         return possibilities;
     }
 
+    function rookPotentialMoves(this: iPiece): string[] {
+        let possibilities: string[] = [];
+
+        // TODO: check if squares are occupied
+
+        let currentRank = this.rank + 1;
+
+        while (currentRank <= Eight) {
+            possibilities.push(`${this.file}${currentRank}`);
+            currentRank += 1;
+        }
+
+        currentRank = this.rank - 1;
+
+        while (currentRank >= One) {
+            possibilities.push(`${this.file}${currentRank}`);
+            currentRank -= 1;
+        }
+
+        let currentFile = this.file;
+
+        while (currentFile !== H ) {
+            switch (currentFile) {
+                case A:
+                    currentFile = B;
+                    break;
+                case B:
+                    currentFile = C;
+                    break;
+                case C:
+                    currentFile = D;
+                    break;
+                case D:
+                    currentFile = E;
+                    break;
+                case E:
+                    currentFile = F;
+                    break;
+                case F:
+                    currentFile = G;
+                    break;
+                case G:
+                    currentFile = H;
+                    break;
+            }
+            possibilities.push(`${currentFile}${this.rank}`);
+        }
+
+        currentFile = this.file;
+
+        while (currentFile !== A) {
+            switch (currentFile) {
+                case B:
+                    currentFile = A;
+                    break;
+                case C:
+                    currentFile = B;
+                    break;
+                case D:
+                    currentFile = C;
+                    break;
+                case E:
+                    currentFile = D;
+                    break;
+                case F:
+                    currentFile = E;
+                    break;
+                case G:
+                    currentFile = F;
+                    break;
+                case H:
+                    currentFile = G;
+                    break;
+            }
+            possibilities.push(`${currentFile}${this.rank}`);
+        }
+
+        return possibilities;
+    }
+
     function location(this: iPiece): string {
         return `${this.file}${this.rank}`
     }
@@ -126,7 +206,7 @@ function Board() {
             type: Rook,
             file: A,
             rank: One,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: rookPotentialMoves,
             getLocation: location,
         },
         {
@@ -182,7 +262,7 @@ function Board() {
             type: Rook,
             file: H,
             rank: One,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: rookPotentialMoves,
             getLocation: location,
         },
         {
@@ -254,7 +334,7 @@ function Board() {
             type: Rook,
             file: A,
             rank: Eight,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: rookPotentialMoves,
             getLocation: location,
         },
         {
@@ -310,7 +390,7 @@ function Board() {
             type: Rook,
             file: H,
             rank: Eight,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: rookPotentialMoves,
             getLocation: location,
         },
     ]
