@@ -125,7 +125,6 @@ function Board() {
         let possibilities: string[] = [];
 
         // TODO: check if squares are occupied
-        // TODO: deal with squares outside of the board
 
         let currentFile: PieceFile | null;
 
@@ -239,6 +238,150 @@ function Board() {
         return possibilities;
     }
 
+    function bishopPotentialMoves(this: iPiece): string[] {
+        let possibilities: string[] = [];
+
+        // TODO: check if squares are occupied
+
+        // up right direction
+
+        let currentRank = this.rank;
+        let currentFile = this.file;
+
+        while (currentRank < Eight && currentFile !== H) {
+            currentRank += 1;
+            switch (currentFile) {
+                case A:
+                    currentFile = B;
+                    break;
+                case B:
+                    currentFile = C;
+                    break;
+                case C:
+                    currentFile = D;
+                    break;
+                case D:
+                    currentFile = E;
+                    break;
+                case E:
+                    currentFile = F;
+                    break;
+                case F:
+                    currentFile = G;
+                    break;
+                case G:
+                    currentFile = H;
+                    break;
+            }
+
+            possibilities.push(`${currentFile}${currentRank}`);
+        }
+
+        // up left direction
+
+        currentRank = this.rank;
+        currentFile = this.file;
+
+        while (currentRank < Eight && currentFile !== A) {
+            currentRank += 1;
+            switch (currentFile) {
+                case B:
+                    currentFile = A;
+                    break;
+                case C:
+                    currentFile = B;
+                    break;
+                case D:
+                    currentFile = C;
+                    break;
+                case E:
+                    currentFile = D;
+                    break;
+                case F:
+                    currentFile = E;
+                    break;
+                case G:
+                    currentFile = F;
+                    break;
+                case H:
+                    currentFile = G;
+                    break;
+            }
+
+            possibilities.push(`${currentFile}${currentRank}`);
+        }
+
+        // down right direction
+
+        currentRank = this.rank;
+        currentFile = this.file;
+
+        while (currentRank > One && currentFile !== H) {
+            currentRank -= 1;
+            switch (currentFile) {
+                case A:
+                    currentFile = B;
+                    break;
+                case B:
+                    currentFile = C;
+                    break;
+                case C:
+                    currentFile = D;
+                    break;
+                case D:
+                    currentFile = E;
+                    break;
+                case E:
+                    currentFile = F;
+                    break;
+                case F:
+                    currentFile = G;
+                    break;
+                case G:
+                    currentFile = H;
+                    break;
+            }
+
+            possibilities.push(`${currentFile}${currentRank}`);
+        }
+
+        // down left direction
+
+        currentRank = this.rank;
+        currentFile = this.file;
+
+        while (currentRank > One && currentFile !== A) {
+            currentRank -= 1;
+            switch (currentFile) {
+                case B:
+                    currentFile = A;
+                    break;
+                case C:
+                    currentFile = B;
+                    break;
+                case D:
+                    currentFile = C;
+                    break;
+                case E:
+                    currentFile = D;
+                    break;
+                case F:
+                    currentFile = E;
+                    break;
+                case G:
+                    currentFile = F;
+                    break;
+                case H:
+                    currentFile = G;
+                    break;
+            }
+
+            possibilities.push(`${currentFile}${currentRank}`);
+        }
+
+        return possibilities;
+    }
+
 
     function location(this: iPiece): string {
         return `${this.file}${this.rank}`
@@ -341,7 +484,7 @@ function Board() {
             type: Bishop,
             file: C,
             rank: One,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: bishopPotentialMoves,
             getLocation: location,
         },
         {
@@ -365,7 +508,7 @@ function Board() {
             type: Bishop,
             file: F,
             rank: One,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: bishopPotentialMoves,
             getLocation: location,
         },
         {
@@ -469,7 +612,7 @@ function Board() {
             type: Bishop,
             file: C,
             rank: Eight,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: bishopPotentialMoves,
             getLocation: location,
         },
         {
@@ -493,7 +636,7 @@ function Board() {
             type: Bishop,
             file: F,
             rank: Eight,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: bishopPotentialMoves,
             getLocation: location,
         },
         {
