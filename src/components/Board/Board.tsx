@@ -599,6 +599,76 @@ function Board() {
         return possibilities;
     }
 
+    function kingPotentialMoves(this: iPiece): string[] {
+        let possibilities: string[] = [];
+
+        // TODO: check if squares are occupied
+        // TODO: check if squares are under attack
+
+        let currentFile = this.file;
+
+        switch (currentFile) {
+            case A:
+                currentFile = B;
+                break;
+            case B:
+                currentFile = C;
+                break;
+            case C:
+                currentFile = D;
+                break;
+            case D:
+                currentFile = E;
+                break;
+            case E:
+                currentFile = F;
+                break;
+            case F:
+                currentFile = G;
+                break;
+            case G:
+                currentFile = H;
+                break;
+        }
+
+        possibilities.push(`${currentFile}${this.rank + 1}`);
+        possibilities.push(`${currentFile}${this.rank}`);
+        possibilities.push(`${currentFile}${this.rank - 1}`);
+
+        currentFile = this.file;
+        switch (currentFile) {
+            case B:
+                currentFile = A;
+                break;
+            case C:
+                currentFile = B;
+                break;
+            case D:
+                currentFile = C;
+                break;
+            case E:
+                currentFile = D;
+                break;
+            case F:
+                currentFile = E;
+                break;
+            case G:
+                currentFile = F;
+                break;
+            case H:
+                currentFile = G;
+                break;
+        }
+        possibilities.push(`${currentFile}${this.rank + 1}`);
+        possibilities.push(`${currentFile}${this.rank}`);
+        possibilities.push(`${currentFile}${this.rank - 1}`);
+
+        possibilities.push(`${this.file}${this.rank + 1}`)
+        possibilities.push(`${this.file}${this.rank - 1}`)
+
+        return possibilities;
+    }
+
     function location(this: iPiece): string {
         return `${this.file}${this.rank}`
     }
@@ -716,7 +786,7 @@ function Board() {
             type: King,
             file: E,
             rank: One,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: kingPotentialMoves,
             getLocation: location,
         },
         {
@@ -844,7 +914,7 @@ function Board() {
             type: King,
             file: E,
             rank: Eight,
-            getPotentialMoves: pawnPotentialMoves,
+            getPotentialMoves: kingPotentialMoves,
             getLocation: location,
         },
         {
