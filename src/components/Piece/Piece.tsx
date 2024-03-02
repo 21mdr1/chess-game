@@ -10,7 +10,7 @@ function Piece({ piece, select }: {
 
     return (
         <img 
-            onClick={ () => {select(piece)} }
+            onClick={ event => { event.stopPropagation(); select(piece)} }
             className={`chess-piece location--${rank} location--${file}`} 
             src={image} 
             alt={`${color} ${type}`} 

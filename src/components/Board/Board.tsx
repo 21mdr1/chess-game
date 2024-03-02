@@ -13,9 +13,23 @@ function Board() {
     let [ selected, setSelected ] = useState<ChessPiece | null>(null);
     let [ potentialMoves, setPotentialMoves ] = useState<string[]>([]);
 
+    function unSelect() {
+        setSelected(null);
+        setPotentialMoves([]);
+    }
+
     function select(piece: ChessPiece): void {
-        setSelected( selected ? null :  piece);
-        setPotentialMoves( selected ? [] : piece.getPotentialMoves() );
+
+        if(selected === null) {
+            setSelected(piece);
+            setPotentialMoves(piece.getPotentialMoves());
+        } else if (selected.getLocation() === piece.getLocation()) {
+            setSelected(null);
+            setPotentialMoves([]);
+        } else {
+            setSelected(piece);
+            setPotentialMoves(piece.getPotentialMoves());
+        }
     }
 
 
@@ -24,6 +38,7 @@ function Board() {
             {ranks.map(rank =>
                 files.map(file => 
                     <Square 
+                        unSelect={ unSelect }
                         key={ file + rank } 
                         file={ file } 
                         rank={ rank }

@@ -65,7 +65,7 @@ function getLetter(number: number): PieceFile {
 }
 
 function isOccupied(square: string): boolean {
-    return !!pieces.find(chessPiece => `${chessPiece.file}${chessPiece.rank}` === square);
+    return !!pieces.find(chessPiece => chessPiece.getLocation() === square);
 }
 
 
