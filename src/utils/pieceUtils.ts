@@ -244,11 +244,11 @@ class ChessPiece {
             possibilities.push(square);
             counter += 1;
 
-            if (distance === 'short' && counter === 1 ||
-                distance === 'pawn' && counter === 1 && 
+            if ((distance === 'short' && counter === 1) ||
+                (distance === 'pawn' && counter === 1 && 
                     ((this.color === PieceColor.White && this.rank !== PieceRank.Two) || 
-                    (this.color === PieceColor.Black && this.rank !== PieceRank.Seven)) ||
-                distance === 'pawn' && counter === 2
+                    (this.color === PieceColor.Black && this.rank !== PieceRank.Seven))) ||
+                (distance === 'pawn' && counter === 2)
             ) {
                 return possibilities;
             }

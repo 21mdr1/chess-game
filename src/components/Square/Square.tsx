@@ -22,7 +22,7 @@ function Square({ rank, file, selected, potentialMove, unSelect, movePiece }: {
 
     const color = selected ? "selected" : 
         potentialMove ? "potential" :
-        (Number(rank) + mapping[file]) % 2 == 0 ? 'dark' : 'light'
+        (Number(rank) + mapping[file]) % 2 === 0 ? 'dark' : 'light'
 
 
     return (
