@@ -1,4 +1,4 @@
-import { ChessPiece, PieceColor, PieceType, PieceRank, PieceFile } from '../../utils/pieceUtils';
+import { ChessPiece } from '../../utils/pieceUtils';
 import './Piece.scss';
 
 function Piece({ piece, select }: {

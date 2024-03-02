@@ -64,6 +64,11 @@ function getLetter(number: number): PieceFile {
     }
 }
 
+function isOccupied(square: string): boolean {
+    return !!pieces.find(chessPiece => `${chessPiece.file}${chessPiece.rank}` === square);
+}
+
+
 class ChessPiece {
     color: PieceColor;
     type: PieceType;
@@ -155,16 +160,7 @@ class ChessPiece {
         }
 
         else if (this.type === PieceType.Knight) {
-            return [
-                `${getLetter(getNumber(this.file) + 2)}${this.rank + 1}`,
-                `${getLetter(getNumber(this.file) + 2)}${this.rank - 1}`,
-                `${getLetter(getNumber(this.file) + 1)}${this.rank + 2}`,
-                `${getLetter(getNumber(this.file) + 1)}${this.rank - 2}`,
-                `${getLetter(getNumber(this.file) - 2)}${this.rank + 1}`,
-                `${getLetter(getNumber(this.file) - 2)}${this.rank - 1}`,
-                `${getLetter(getNumber(this.file) - 1)}${this.rank + 2}`,
-                `${getLetter(getNumber(this.file) - 1)}${this.rank - 2}`,
-            ];
+            return this.getKnightPossibilities();
         }
 
         else if (this.type === PieceType.Bishop) {
@@ -205,6 +201,24 @@ class ChessPiece {
         return [];
     }
 
+    private getKnightPossibilities(): string[] {
+
+        let possibilities: string[] = [];
+
+        for (let pair of [[2, 1], [2, -1], [-2, 1], [-2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2]]) {
+            if(getNumber(this.file) + pair[0] >= 1 && 
+                getNumber(this.file) + pair[0] <= 8 && 
+                this.rank + pair[1] >= 1 &&
+                this.rank + pair[1] <= 8 &&
+                !isOccupied(`${getLetter(getNumber(this.file) + pair[0])}${this.rank + pair[1]}`))
+            {
+                possibilities.push(`${getLetter(getNumber(this.file) + pair[0])}${this.rank + pair[1]}`)
+            }
+
+        }
+        return possibilities;
+    }
+
     private checkVerticalDirection (direction: 'up' | 'down', distance: 'short' | 'far' | 'pawn'): string[] {
 
         function rankIsValid(currentRank: PieceRank): boolean {
@@ -222,7 +236,12 @@ class ChessPiece {
         let counter = 0;
 
         while (rankIsValid(currentRank)) {
-            possibilities.push(`${this.file}${currentRank}`);
+            let square = `${this.file}${currentRank}`;
+            if (isOccupied(square)) {
+                return possibilities;
+            }
+
+            possibilities.push(square);
             counter += 1;
 
             if (distance === 'short' && counter === 1 ||
@@ -256,14 +275,19 @@ class ChessPiece {
             let currentFile = getNumber(this.file) + multiplier();
 
             while (fileIsValid(currentFile)) {
-                possibilities.push(`${getLetter(currentFile)}${this.rank}`);
+                let square = `${getLetter(currentFile)}${this.rank}`;
+                if (isOccupied(square)) {
+                    break;
+                }
+                possibilities.push(square);
                 currentFile += multiplier();
             }
 
             return possibilities;
         } 
 
-        return [`${getLetter(getNumber(this.file) + multiplier())}${this.rank}`];
+        let square = `${getLetter(getNumber(this.file) + multiplier())}${this.rank}`;
+        return isOccupied(square) ? [] : [square];
     }
 
     private checkDiagonalDirection (direction: 'up right' | 'up left' | 'down right' | 'down left', distance: 'short' | 'far'): string[] {
@@ -291,7 +315,11 @@ class ChessPiece {
             let currentRank = this.rank + multiplier("rank");
 
             while (rankIsValid(currentRank) && fileIsValid(currentFile)) {
-                possibilities.push(`${getLetter(currentFile)}${currentRank}`);
+                let square = `${getLetter(currentFile)}${currentRank}`;
+                if (isOccupied(square)) {
+                    break;
+                }
+                possibilities.push(square);
                     currentFile += multiplier("file");
                     currentRank += multiplier("rank");
             }
@@ -299,7 +327,8 @@ class ChessPiece {
             return possibilities;
         }
 
-        return [`${getLetter(getNumber(this.file) + multiplier("file"))}${this.rank + multiplier("rank")}`];
+        let square = `${getLetter(getNumber(this.file) + multiplier("file"))}${this.rank + multiplier("rank")}`;
+        return isOccupied(square) ? [] : [square];
     }
 }
 
