@@ -11,7 +11,8 @@ const mapping = {
     'h': 8
 }
 
-function Square({ rank, file, selected, potentialMove, unSelect }: {
+function Square({ rank, file, selected, potentialMove, unSelect, movePiece }: {
+    movePiece(square: string): void;
     unSelect(): void;
     rank: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
     file: 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
@@ -27,7 +28,7 @@ function Square({ rank, file, selected, potentialMove, unSelect }: {
     return (
         <div 
             className={`square location--${rank} location--${file} square--${color}`}
-            onClick={unSelect}
+            onClick={potentialMove ? () => movePiece(`${file}${rank}`) : unSelect}
         >
         </div>
     );

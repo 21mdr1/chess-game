@@ -1,7 +1,7 @@
 import Square from '../Square/Square';
 import Piece from '../Piece/Piece';
 import { useState } from 'react';
-import { ChessPiece, pieces as pieceArray } from '../../utils/pieceUtils';
+import { ChessPiece, pieces as pieceArray, getNumber, getLetter } from '../../utils/pieceUtils';
 import './Board.scss';
 
 function Board() {
@@ -19,7 +19,6 @@ function Board() {
     }
 
     function select(piece: ChessPiece): void {
-
         if(selected === null) {
             setSelected(piece);
             setPotentialMoves(piece.getPotentialMoves());
@@ -32,12 +31,29 @@ function Board() {
         }
     }
 
+    function movePiece(square: string) {
+        const movedPiece = selected;
+
+        if (!movedPiece) {
+            return;
+        }
+
+        movedPiece.file = getLetter(getNumber(square[0]));
+        movedPiece.rank = Number(square[1]);
+        
+        const otherPieces = pieces.filter(otherPiece => otherPiece.getLocation() !== square);
+
+        setPieces([...otherPieces, movedPiece]);
+        unSelect();
+    }
+
 
     return (
         <div className='board'>
             {ranks.map(rank =>
                 files.map(file => 
                     <Square 
+                        movePiece={ movePiece }
                         unSelect={ unSelect }
                         key={ file + rank } 
                         file={ file } 
