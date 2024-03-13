@@ -17,6 +17,7 @@ function Board() {
     //  show last move
     //  drag and drop of pieces (drag to move piece or to show possible moves??)
     //  show files and ranks
+    //  record moves?
 
     let [ locations, _setLocations ] = useState(locationsObj);
 
