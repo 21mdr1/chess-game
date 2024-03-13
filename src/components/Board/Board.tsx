@@ -1,21 +1,18 @@
 import Square from '../Square/Square';
 import Piece from '../Piece/Piece';
 import { useState } from 'react';
-import { ChessPiece, pieces as pieceArray, locations as locationsObj, fileLetter, square, PieceFile, PieceRank } from '../../utils/pieceUtils';
+import { ChessPiece, locations as locationsObj, square, PieceFile, PieceRank } from '../../utils/pieceUtils';
 import './Board.scss';
 
 function Board() {
-    let [ pieces, setPieces ] = useState(pieceArray);
-    let [ locations, setLocations ] = useState(locationsObj);
+    let [ locations, _setLocations ] = useState(locationsObj);
 
     let [ selected, setSelected ] = useState<ChessPiece | null>(null);
     let [ potentialMoves, setPotentialMoves ] = useState<string[]>([]);
-    let [ potentialCaptures, setPotentialCaptures ] = useState<string[]>([]);
 
     function unSelect() {
         setSelected(null);
         setPotentialMoves([]);
-        setPotentialCaptures([]);
     }
 
     function select(piece: ChessPiece): void {
@@ -24,7 +21,6 @@ function Board() {
         ) {
             setSelected(piece);
             setPotentialMoves(piece.moves());
-            setPotentialCaptures([]); // change
         } else {
             unSelect();
         }
@@ -37,18 +33,13 @@ function Board() {
             return;
         }
 
-        locations[movedPiece.getLocation()] = undefined;
+        delete locations[movedPiece.getLocation()];
         locations[square(file, rank)] = movedPiece;
 
         movedPiece.move(file, rank);
         
         unSelect();
     }
-
-    function capturePiece(square: string) {
-
-    }
-
 
     return (
         <div className='board'>
@@ -62,11 +53,10 @@ function Board() {
                         rank={ rank }
                         selected={ selected !== null && selected.getLocation() === `${square(file, rank)}` }
                         potentialMove={ potentialMoves.length !== 0 && potentialMoves.includes(`${square(file, rank)}`) }
-                        potentialCapture={ false }
                     />
                 )
             )}
-            {pieces.map((piece: ChessPiece) =>
+            {Object.values(locations).map((piece: ChessPiece) =>
                 <Piece 
                     key={ `${square(piece.file, piece.rank)}` } 
                     piece={ piece }

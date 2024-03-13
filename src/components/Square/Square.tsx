@@ -1,25 +1,22 @@
 import { PieceRank, PieceFile, fileLetter } from '../../utils/pieceUtils';
 import './Square.scss';
 
-function Square({ rank, file, selected, potentialMove, potentialCapture, unSelect, movePiece }: {
+function Square({ rank, file, selected, potentialMove, unSelect, movePiece }: {
     movePiece(file: PieceFile, rank: PieceRank): void;
     unSelect(): void;
     rank: PieceRank;
     file: PieceFile;
     selected: boolean;
     potentialMove: boolean;
-    potentialCapture: boolean;
 }) {
 
     const color = selected ? "selected" : 
-        potentialMove || potentialCapture ? "potential" :
+        potentialMove ? "potential" :
         (rank + file) % 2 === 0 ? 'dark' : 'light'
 
     function handleClick() {
         if (potentialMove) {
             movePiece(file, rank);
-        } else if (potentialCapture) {
-
         } else {
             unSelect();
         }
