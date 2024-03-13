@@ -5,6 +5,19 @@ import { ChessPiece, locations as locationsObj, square, PieceFile, PieceRank } f
 import './Board.scss';
 
 function Board() {
+    // TODO FEATURES:
+    //  have selection handler be on square not on piece
+    //  make it so you can't (accidentally) select piece of opposite color when you're trying to capture
+    //  castling
+    //  en passante
+    //  king is in check and checkmate -- not able to just capture king :')
+    //      on that note: restrict moves when in check
+    //  restrict where king can move because of other pieces
+    //  turns
+    //  show last move
+    //  drag and drop of pieces (drag to move piece or to show possible moves??)
+    //  show files and ranks
+
     let [ locations, _setLocations ] = useState(locationsObj);
 
     let [ selected, setSelected ] = useState<ChessPiece | null>(null);
