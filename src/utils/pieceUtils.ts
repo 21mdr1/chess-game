@@ -114,6 +114,13 @@ class ChessPiece {
         this.file = file;
         this.rank = rank;
         this.hasMoved = true;
+
+        let otherSide = this.color === White ? Eight : One;
+        if (this.type === Pawn && rank === otherSide) {
+            this.promoteTo(Queen);
+            // TODO: give promotion choices
+        }
+
     }
 
     promoteTo(type: PieceType): void {
@@ -144,11 +151,14 @@ class ChessPiece {
     moves(): string[] {
         switch (this.type) {
             case Pawn:
-                return this.straightMoves(
-                    this.color === White ? 1 : -1,
-                    0,
-                    this.hasMoved ? 1 : 2
-                );
+                return [
+                    ...this.straightMoves(
+                        this.color === White ? 1 : -1,
+                        0,
+                        this.hasMoved ? 1 : 2
+                    ), 
+                    ...this.pawnCaptures(this.color === White ? 1 : -1)
+                ];
             case Rook:
                 return [
                     ...this.straightMoves(0, 1, 8), ...this.straightMoves(0, -1, 8),
@@ -176,6 +186,27 @@ class ChessPiece {
                     ...this.straightMoves(1, -1, 1), ...this.straightMoves(-1, -1, 1)
                 ];
         }
+    }
+
+    private pawnCaptures(dir: -1 | 1): string[] {
+        let rank = this.rank + dir;
+
+        if (rank < One || rank > Eight) {
+            return [];
+        }
+
+        let moves: string[] = [];
+        for (let hDir of [-1, 1]) {
+            let file = this.file + hDir;
+            const destination = square(file, rank);
+            const destinationPiece = locations[destination]
+
+            if (file >= A && file <= H && destinationPiece && destinationPiece.color !== this.color) {
+                moves.push(destination);
+            }
+        }
+
+        return moves;
     }
 
     private knightMoves(): string[] {
