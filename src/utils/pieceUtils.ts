@@ -10,334 +10,256 @@ import blackKnight from '../assets/default-chess-set/black-knight.png';
 import blackBishop from '../assets/default-chess-set/black-bishop.png';
 import blackQueen from '../assets/default-chess-set/black-queen.png';
 import blackKing from '../assets/default-chess-set/black-king.png';
+// types
 
-enum PieceColor { White = 'white', Black = 'black' };
+type square = 'a1' | 'a2' | 'a3' | 'a4' | 'a5' | 'a6' | 'a7' | 'a8' | 'b1' | 'b2' | 'b3' | 'b4' | 'b5' | 'b6' | 'b7' | 'b8' | 'c1' | 'c2' | 'c3' | 'c4' | 'c5' | 'c6' | 'c7' | 'c8' | 'd1' | 'd2' | 'd3' | 'd4' | 'd5' | 'd6' | 'd7' | 'd8' | 'e1' | 'e2' | 'e3' | 'e4' | 'e5' | 'e6' | 'e7' | 'e8' | 'f1' | 'f2' | 'f3' | 'f4' | 'f5' | 'f6' | 'f7' | 'f8' | 'g1' | 'g2' | 'g3' | 'g4' | 'g5' | 'g6' | 'g7' | 'g8' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'h7' | 'h8'
+
+enum PieceColor {White = 'white', Black = 'black'};
+const { White, Black } = PieceColor;
+
 enum PieceType { Pawn = 'pawn', Rook = 'rook', Knight = 'knight', Bishop = 'bishop', Queen = 'queen', King = 'king' };
+const { Pawn, Rook , Knight, Bishop, Queen, King } = PieceType;
 
 enum PieceRank { One = 1, Two, Three, Four, Five, Six, Seven, Eight };
-enum PieceFile { A = 'a', B = 'b', C = 'c', D = 'd', E = 'e', F = 'f', G = 'g', H = 'h' };
+const { One, Two, Three, Four, Five, Six, Seven, Eight } = PieceRank;
 
+enum PieceFile { A = 1, B, C, D, E, F, G, H };
+const { A, B, C, D, E, F, G, H } = PieceFile;
 
-function getNumber(letter: string): number {
-    switch (letter) {
-        case 'a':
-            return 1;
-        case 'b':
-            return 2;
-        case 'c':
-            return 3;
-        case 'd':
-            return 4;
-        case 'e':
-            return 5;
-        case 'f':
-            return 6;
-        case 'g':
-            return 7;
-        case 'h':
-            return 8;
-        default:
-            return 0;
+// functions
+
+function fileLetter(file: PieceFile): 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' 
+{
+    const mapping: 
+        ('a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h')[] = 
+        ["a", "b", "c", "d", "e", "f", "g", "h"]
+    return mapping[file - 1]
+}
+
+function square(file: PieceFile, rank: PieceRank): square {
+    return `${fileLetter(file)}${rank}`;
+}
+
+// classes
+
+type pieceInfo = {
+    image: string;
+    counter: number;
+}
+
+let info = {
+    white: {
+        pawn: {image: whitePawn, counter: 0},
+        rook: {image: whiteRook, counter: 0},
+        knight: {image: whiteKnight, counter: 0},
+        bishop: {image: whiteBishop, counter: 0},
+        king: {image: whiteKing, counter: 0},
+        queen: {image: whiteQueen, counter: 0},
+    },
+    black: {
+        pawn: {image: blackPawn, counter: 0},
+        rook: {image: blackRook, counter: 0},
+        knight: {image: blackKnight, counter: 0},
+        bishop: {image: blackBishop, counter: 0},
+        king: {image: blackKing, counter: 0},
+        queen: {image: blackQueen, counter: 0},
     }
-}
 
-function getLetter(number: number): PieceFile {
-    switch (number) {
-        case 1:
-            return PieceFile.A
-        case 2:
-            return PieceFile.B
-        case 3:
-            return PieceFile.C
-        case 4:
-            return PieceFile.D
-        case 5:
-            return PieceFile.E
-        case 6:
-            return PieceFile.F
-        case 7:
-            return PieceFile.G
-        case 8:
-            return PieceFile.H
-        default:
-            return PieceFile.A;
-    }
 }
-
-function isOccupied(square: string): boolean {
-    return !!pieces.find(chessPiece => chessPiece.getLocation() === square);
-}
-
 
 class ChessPiece {
-    color: PieceColor;
-    type: PieceType;
+    file: PieceFile;
+    rank: PieceRank;
     image: string;
+    hasMoved: boolean;
 
-    constructor(public file: PieceFile, public rank: PieceRank) {
-        if (rank === PieceRank.Two) {
-            this.color = PieceColor.White;
-            this.type = PieceType.Pawn;
-            this.image = whitePawn;
+    constructor(public color: PieceColor, public type: PieceType) {
+        this.hasMoved = false;
+
+        switch (color) {
+            case White:
+                this.rank = type === Pawn ? Two : One;
+                break;
+            case Black:
+                this.rank = type === Pawn ? Seven : Eight;
+        }
+
+        this.image = info[this.color][this.type].image;
+
+        info[this.color][this.type].counter += 1
+        
+        switch (type) {
+            case Pawn:
+                this.file = info[this.color][this.type].counter;
+                break;
+            case Rook:
+                this.file = info[this.color][this.type].counter === 1 ? A : H;
+                break;
+            case Knight:
+                this.file = info[this.color][this.type].counter === 1 ? B : G;
+                break;
+            case Bishop:
+                this.file = info[this.color][this.type].counter === 1 ? C : F;
+                break
+            case Queen:
+                this.file = D;
+                break;
+            case King:
+                this.file = E;
+                break;
+        }
+    }
+
+    getLocation(): square {
+        return square(this.file, this.rank);
+    }
+
+    move(file: PieceFile, rank: PieceRank): void {
+        this.file = file;
+        this.rank = rank;
+        this.hasMoved = true;
+    }
+
+    promoteTo(type: PieceType): void {
+        if (this.type !== Pawn) {
             return;
-        } else if (rank === PieceRank.Seven) {
-            this.color = PieceColor.Black;
-            this.type = PieceType.Pawn;
-            this.image = blackPawn;
-            return;
-        } else if (rank === PieceRank.One) {
-            this.color = PieceColor.White;
+        }
 
-            if (file === PieceFile.A || file === PieceFile.H) {
-                this.type = PieceType.Rook;
-                this.image = whiteRook;
-            } else if (file === PieceFile.B || file === PieceFile.G) {
-                this.type = PieceType.Knight;
-                this.image = whiteKnight;
-            } else if (file === PieceFile.C || file === PieceFile.F) {
-                this.type = PieceType.Bishop;
-                this.image = whiteBishop;
-            } else if (file === PieceFile.D) {
-                this.type = PieceType.Queen;
-                this.image = whiteQueen;
-            } else if (file === PieceFile.E) {
-                this.type = PieceType.King;
-                this.image = whiteKing;
-            } else {
-                this.type = PieceType.Pawn;
-                this.image = whitePawn;
-            }
-        } else if (rank === PieceRank.Eight) {
-            this.color = PieceColor.Black;
+        this.type = type;
+        this.image = info[this.color][this.type].image;
+    }
 
-            if (file === PieceFile.A || file === PieceFile.H) {
-                this.type = PieceType.Rook;
-                this.image = blackRook;
-            } else if (file === PieceFile.B || file === PieceFile.G) {
-                this.type = PieceType.Knight;
-                this.image = blackKnight;
-            } else if (file === PieceFile.C || file === PieceFile.F) {
-                this.type = PieceType.Bishop;
-                this.image = blackBishop;
-            } else if (file === PieceFile.D) {
-                this.type = PieceType.Queen;
-                this.image = blackQueen;
-            } else if (file === PieceFile.E) {
-                this.type = PieceType.King;
-                this.image = blackKing;
-            } else {
-                this.type = PieceType.Pawn;
-                this.image = whitePawn;
-            }
-        } else {
-            this.color = PieceColor.White;
-            this.type = PieceType.Pawn;
-            this.image = whitePawn;
+    isInCheck(): boolean {
+        if (this.type !== King) {
+            return false;
+        }
+
+        return false;
+    }
+
+    isInCheckMate(): boolean {
+        if (this.type !== King) {
+            return false;
+        }
+
+        return false;
+    }
+
+    moves(): string[] {
+        switch (this.type) {
+            case Pawn:
+                return this.straightMoves(
+                    this.color === White ? 1 : -1,
+                    0,
+                    this.hasMoved ? 1 : 2
+                );
+            case Rook:
+                return [
+                    ...this.straightMoves(0, 1, 8), ...this.straightMoves(0, -1, 8),
+                    ...this.straightMoves(1, 0, 8), ...this.straightMoves(-1, 0, 8)
+                ];
+            case Knight:
+                return this.knightMoves();
+            case Bishop:
+                return [
+                    ...this.straightMoves(1, 1, 8), ...this.straightMoves(-1, 1, 8),
+                    ...this.straightMoves(1, -1, 8), ...this.straightMoves(-1, -1, 8)
+                ];
+            case Queen:
+                return [
+                    ...this.straightMoves(1, 0, 8), ...this.straightMoves(-1, 0, 8),
+                    ...this.straightMoves(0, 1, 8), ...this.straightMoves(0, -1, 8),
+                    ...this.straightMoves(1, 1, 8), ...this.straightMoves(-1, 1, 8),
+                    ...this.straightMoves(1, -1, 8), ...this.straightMoves(-1, -1, 8)
+                ];
+            case King:
+                return [
+                    ...this.straightMoves(1, 0, 1), ...this.straightMoves(-1, 0, 1),
+                    ...this.straightMoves(0, 1, 1), ...this.straightMoves(0, -1, 1),
+                    ...this.straightMoves(1, 1, 1), ...this.straightMoves(-1, 1, 1),
+                    ...this.straightMoves(1, -1, 1), ...this.straightMoves(-1, -1, 1)
+                ];
         }
     }
 
-    getLocation(): string {
-        return `${this.file}${this.rank}`
-    }
+    private knightMoves(): string[] {
+        let moves: string[] = [];
 
-    getPotentialMoves(): string[] {
+        for (let move of [[2, 1], [2, -1], [-2, 1], [-2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2]]) {
+            const rank = this.rank + move[0];
+            const file = this.file + move[1];
 
-        if (this.type === PieceType.Pawn) {
-            if (this.color === PieceColor.White) {
-                return this.checkVerticalDirection('up', 'pawn');
-            } else {
-                return this.checkVerticalDirection('down', 'pawn');
-            }
-        }
+            const destination = square(this.file + move[1], this.rank + move[0])
+            const destinationPiece = locations[destination]
 
-        else if (this.type === PieceType.Rook) {
-            return [
-                ...this.checkVerticalDirection('up', 'far'),
-                ...this.checkVerticalDirection('down', 'far'),
-                ...this.checkHorizontalDirection('right', 'far'),
-                ...this.checkHorizontalDirection('left', 'far')
-            ];
-        }
-
-        else if (this.type === PieceType.Knight) {
-            return this.getKnightPossibilities();
-        }
-
-        else if (this.type === PieceType.Bishop) {
-            return [
-                ...this.checkDiagonalDirection('up right', 'far'),
-                ...this.checkDiagonalDirection('up left', 'far'),
-                ...this.checkDiagonalDirection('down right', 'far'),
-                ...this.checkDiagonalDirection('down left', 'far')
-            ]
-        }
-
-        else if (this.type === PieceType.Queen) {
-            return [
-                ...this.checkVerticalDirection('up', 'far'),
-                ...this.checkVerticalDirection('down', 'far'),
-                ...this.checkHorizontalDirection('right', 'far'),
-                ...this.checkHorizontalDirection('left', 'far'),
-                ...this.checkDiagonalDirection('up right', 'far'),
-                ...this.checkDiagonalDirection('up left', 'far'),
-                ...this.checkDiagonalDirection('down right', 'far'),
-                ...this.checkDiagonalDirection('down left', 'far')
-            ]
-        }
-
-        else if (this.type === PieceType.King) {
-            return [
-                ...this.checkVerticalDirection('up', 'short'),
-                ...this.checkVerticalDirection('down', 'short'),
-                ...this.checkHorizontalDirection('right', 'short'),
-                ...this.checkHorizontalDirection('left', 'short'),
-                ...this.checkDiagonalDirection('up right', 'short'),
-                ...this.checkDiagonalDirection('up left', 'short'),
-                ...this.checkDiagonalDirection('down right', 'short'),
-                ...this.checkDiagonalDirection('down left', 'short')
-            ]
-        }
-
-        return [];
-    }
-
-    private getKnightPossibilities(): string[] {
-
-        let possibilities: string[] = [];
-
-        for (let pair of [[2, 1], [2, -1], [-2, 1], [-2, -1], [1, 2], [1, -2], [-1, 2], [-1, -2]]) {
-            if(getNumber(this.file) + pair[0] >= 1 && 
-                getNumber(this.file) + pair[0] <= 8 && 
-                this.rank + pair[1] >= 1 &&
-                this.rank + pair[1] <= 8 &&
-                !isOccupied(`${getLetter(getNumber(this.file) + pair[0])}${this.rank + pair[1]}`))
-            {
-                possibilities.push(`${getLetter(getNumber(this.file) + pair[0])}${this.rank + pair[1]}`)
-            }
-
-        }
-        return possibilities;
-    }
-
-    private checkVerticalDirection (direction: 'up' | 'down', distance: 'short' | 'far' | 'pawn'): string[] {
-
-        function rankIsValid(currentRank: PieceRank): boolean {
-            return direction.includes('up') ? 
-                currentRank <= PieceRank.Eight : 
-                currentRank >= PieceRank.One;
-        }
-
-        function multiplier(): 1 | -1 {
-            return direction.includes('up') ? 1 : -1;
-        }
-
-        let possibilities: string[] = [];
-        let currentRank = this.rank + multiplier();
-        let counter = 0;
-
-        while (rankIsValid(currentRank)) {
-            let square = `${this.file}${currentRank}`;
-            if (isOccupied(square)) {
-                return possibilities;
-            }
-
-            possibilities.push(square);
-            counter += 1;
-
-            if ((distance === 'short' && counter === 1) ||
-                (distance === 'pawn' && counter === 1 && 
-                    ((this.color === PieceColor.White && this.rank !== PieceRank.Two) || 
-                    (this.color === PieceColor.Black && this.rank !== PieceRank.Seven))) ||
-                (distance === 'pawn' && counter === 2)
-            ) {
-                return possibilities;
-            }
-
-            currentRank += multiplier();
-        }
-
-        return possibilities;
-    }
-
-    private checkHorizontalDirection (direction: 'right' | 'left', distance: 'short' | 'far'): string[] {
-        function fileIsValid(currentFile: number): boolean {
-            return direction ==='right' ?
-                currentFile <= getNumber(PieceFile.H) :
-                currentFile >= getNumber(PieceFile.A);
-        }
-
-        function multiplier(): 1 | -1 {
-            return direction === 'right' ? 1 : -1;
-        }
-
-        if (distance === 'far') {
-            let possibilities: string[] = [];
-            let currentFile = getNumber(this.file) + multiplier();
-
-            while (fileIsValid(currentFile)) {
-                let square = `${getLetter(currentFile)}${this.rank}`;
-                if (isOccupied(square)) {
-                    break;
+            if ( rank >= One && rank <= Eight && file >= A && file <= H ) {
+                if(!destinationPiece || destinationPiece?.color !== this.color) {
+                    moves.push(destination);
                 }
-                possibilities.push(square);
-                currentFile += multiplier();
             }
+        }
 
-            return possibilities;
-        } 
-
-        let square = `${getLetter(getNumber(this.file) + multiplier())}${this.rank}`;
-        return isOccupied(square) ? [] : [square];
+        return moves;
     }
 
-    private checkDiagonalDirection (direction: 'up right' | 'up left' | 'down right' | 'down left', distance: 'short' | 'far'): string[] {
-        function rankIsValid(currentRank: PieceRank): boolean {
-            return direction.includes('up') ? 
-                currentRank <= PieceRank.Eight : 
-                currentRank >= PieceRank.One;
-        }
+    straightMoves(vDir: 1 | 0 | -1, hDir: 1 | 0 | -1, dist: 1 | 2 | 8) {
+        let moves: string[] = [];
 
-        function fileIsValid(currentFile: number): boolean {
-            return direction.includes('right') ?
-                currentFile <= getNumber(PieceFile.H) :
-                currentFile >= getNumber(PieceFile.A);
-        }
+        for (let i = 1; i <= dist; i++) {
+            let file = this.file + (i * hDir);
+            let rank = this.rank + (i * vDir);
 
-        function multiplier(type: 'rank' | 'file'): 1 | -1 {
-            return type === 'rank' ?
-                (direction.includes('up') ? 1 : -1) :
-                (direction.includes('right') ? 1 : -1);
-        }
-
-        if (distance === 'far') {
-            let possibilities: string[] = [];
-            let currentFile = getNumber(this.file) + multiplier("file");
-            let currentRank = this.rank + multiplier("rank");
-
-            while (rankIsValid(currentRank) && fileIsValid(currentFile)) {
-                let square = `${getLetter(currentFile)}${currentRank}`;
-                if (isOccupied(square)) {
-                    break;
-                }
-                possibilities.push(square);
-                    currentFile += multiplier("file");
-                    currentRank += multiplier("rank");
+            if (file < A || file > H || rank < One || rank > Eight) {
+                break;
             }
 
-            return possibilities;
+            const destination = square(file, rank);
+            const destinationPiece = locations[destination]
+
+            if (!destinationPiece) {
+                moves.push(destination);
+            } else if (destinationPiece.color !== this.color) {
+                moves.push(destination);
+                break;
+            } else {
+                break;
+            }
         }
 
-        let square = `${getLetter(getNumber(this.file) + multiplier("file"))}${this.rank + multiplier("rank")}`;
-        return isOccupied(square) ? [] : [square];
+        return moves;
     }
 }
 
-let pieces: ChessPiece[] = [];
+// instances
 
-for (let file of [PieceFile.A, PieceFile.B, PieceFile.C, PieceFile.D, PieceFile.E, PieceFile.F, PieceFile.G, PieceFile.H]) {
-    for(let rank of [PieceRank.One, PieceRank.Two, PieceRank.Seven, PieceRank.Eight]) {
-        pieces.push(new ChessPiece(file, rank));
+const pieces: ChessPiece[] = [];
+const locations: Record<string, ChessPiece | undefined> = {}
+
+for (let color of [ Black, White ]) {
+    for (let type of [ Pawn, Rook, Knight, Bishop, Queen, King ]){
+        switch (type) {
+            case Pawn:
+                for (let i = 0; i < 8; i++) {
+                    let piece = new ChessPiece(color, type);
+                    pieces.push(piece);
+                    locations[piece.getLocation()] = piece;
+                }
+                break;
+            case Queen:
+            case King:
+                let piece = new ChessPiece(color, type);
+                pieces.push(piece);
+                locations[piece.getLocation()] = piece;
+                break;
+            default:
+                for (let i = 0; i < 2; i++) {
+                    let piece = new ChessPiece(color, type);
+                    pieces.push(piece);
+                    locations[piece.getLocation()] = piece;
+                }
+        }
     }
 }
 
-export { ChessPiece, PieceColor, PieceType, PieceFile, PieceRank, getNumber, getLetter, pieces };
+
+export { ChessPiece, PieceColor, PieceType, PieceRank, PieceFile, fileLetter, pieces, locations, square }

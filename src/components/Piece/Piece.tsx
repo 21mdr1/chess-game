@@ -1,4 +1,4 @@
-import { ChessPiece } from '../../utils/pieceUtils';
+import { ChessPiece, fileLetter } from '../../utils/pieceUtils';
 import './Piece.scss';
 
 function Piece({ piece, select }: {
@@ -11,7 +11,7 @@ function Piece({ piece, select }: {
     return (
         <img 
             onClick={ event => { event.stopPropagation(); select(piece)} }
-            className={`chess-piece location--${rank} location--${file}`} 
+            className={`chess-piece location--${rank} location--${fileLetter(file)}`} 
             src={image} 
             alt={`${color} ${type}`} 
         />

@@ -1,71 +1,74 @@
 import Square from '../Square/Square';
 import Piece from '../Piece/Piece';
 import { useState } from 'react';
-import { ChessPiece, pieces as pieceArray, getNumber, getLetter } from '../../utils/pieceUtils';
+import { ChessPiece, pieces as pieceArray, locations as locationsObj, fileLetter, square, PieceFile, PieceRank } from '../../utils/pieceUtils';
 import './Board.scss';
 
 function Board() {
-    const files: ('a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h')[] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const ranks: ('1' | '2' | '3' | '4' | '5' | '6' | '7' | '8')[] = ['1', '2', '3', '4', '5', '6', '7', '8'];
-
     let [ pieces, setPieces ] = useState(pieceArray);
+    let [ locations, setLocations ] = useState(locationsObj);
 
     let [ selected, setSelected ] = useState<ChessPiece | null>(null);
     let [ potentialMoves, setPotentialMoves ] = useState<string[]>([]);
+    let [ potentialCaptures, setPotentialCaptures ] = useState<string[]>([]);
 
     function unSelect() {
         setSelected(null);
         setPotentialMoves([]);
+        setPotentialCaptures([]);
     }
 
     function select(piece: ChessPiece): void {
-        if(selected === null) {
+        if(selected === null || 
+            selected.getLocation() !== piece.getLocation()
+        ) {
             setSelected(piece);
-            setPotentialMoves(piece.getPotentialMoves());
-        } else if (selected.getLocation() === piece.getLocation()) {
-            setSelected(null);
-            setPotentialMoves([]);
+            setPotentialMoves(piece.moves());
+            setPotentialCaptures([]); // change
         } else {
-            setSelected(piece);
-            setPotentialMoves(piece.getPotentialMoves());
+            unSelect();
         }
     }
 
-    function movePiece(square: string) {
+    function movePiece(file: PieceFile, rank: PieceRank) {
         const movedPiece = selected;
 
         if (!movedPiece) {
             return;
         }
 
-        movedPiece.file = getLetter(getNumber(square[0]));
-        movedPiece.rank = Number(square[1]);
-        
-        const otherPieces = pieces.filter(otherPiece => otherPiece.getLocation() !== square);
+        locations[movedPiece.getLocation()] = undefined;
+        locations[square(file, rank)] = movedPiece;
 
-        setPieces([...otherPieces, movedPiece]);
+        movedPiece.move(file, rank);
+        
         unSelect();
+    }
+
+    function capturePiece(square: string) {
+
     }
 
 
     return (
         <div className='board'>
-            {ranks.map(rank =>
-                files.map(file => 
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(rank =>
+                [1, 2, 3, 4, 5, 6, 7, 8].map(file =>
                     <Square 
                         movePiece={ movePiece }
                         unSelect={ unSelect }
-                        key={ file + rank } 
+                        key={ `${square(file, rank)}` } 
                         file={ file } 
                         rank={ rank }
-                        selected={ selected !== null && selected.getLocation() === `${file}${rank}` }
-                        potentialMove={ potentialMoves.length !== 0 && potentialMoves.includes(`${file}${rank}`) }
+                        selected={ selected !== null && selected.getLocation() === `${square(file, rank)}` }
+                        potentialMove={ potentialMoves.length !== 0 && potentialMoves.includes(`${square(file, rank)}`) }
+                        potentialCapture={ false }
                     />
                 )
             )}
             {pieces.map((piece: ChessPiece) =>
                 <Piece 
-                    key={ `${piece.file}${piece.rank}` } 
+                    key={ `${square(piece.file, piece.rank)}` } 
                     piece={ piece }
                     select={ select }
                 />
