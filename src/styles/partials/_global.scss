@@ -69,3 +69,21 @@ ul, ol {
         grid-row: 1;
     }
 }
+
+.orientation {
+    &--up {
+        &.chess-piece {
+            transition: transform 0s ease-in-out;
+        }
+        transform: rotate(0deg);
+        transition: transform 1s ease-in-out;
+    }
+
+    &--down {
+        &.chess-piece {
+            transition: transform 0s ease-in-out;
+        }
+        transform: rotate(180deg);
+        transition: transform 1s ease-in-out;
+    }
+}

@@ -1,19 +1,33 @@
-import { ChessPiece, fileLetter } from '../../utils/pieceUtils';
+import { ChessPiece, PieceColor, fileLetter } from '../../utils/pieceUtils';
 import './Piece.scss';
 
-function Piece({ piece, select }: {
+function Piece({ turn, piece, select }: {
+    turn: PieceColor;
     piece: ChessPiece;
     select (piece: ChessPiece): void;
 }) {
 
     const { rank, file, color, type, image } = piece;
 
+    function clickHandler(event: React.MouseEvent<HTMLImageElement, MouseEvent>) {
+        if(turn === color) {
+            event.stopPropagation();
+            select(piece);
+        }
+    }
+
+
     return (
         <img 
-            onClick={ event => { event.stopPropagation(); select(piece)} }
-            className={`chess-piece location--${rank} location--${fileLetter(file)}`} 
-            src={image} 
-            alt={`${color} ${type}`} 
+            onClick={ clickHandler }
+            className={
+                `chess-piece 
+                ${turn === color && 'chess-piece--clickable'}
+                orientation--${turn === PieceColor.White ? 'up' : 'down'} location--${rank}
+                location--${fileLetter(file)}`
+            } 
+            src={ image }
+            alt={ `${color} ${type}` } 
         />
     );
 }
